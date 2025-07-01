@@ -4,7 +4,7 @@
     "slug": "math-rush",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Math Rush for Kids.png",
     "scheme": "math-rush",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
