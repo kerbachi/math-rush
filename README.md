@@ -180,6 +180,26 @@ npm run build:web
 
 For mobile app stores, you'll need to create a development build or use EAS Build.
 
+## Expo project
+
+### First init
+
+```
+eas init
+```
+
+### Configure EAS Build
+
+```
+eas build:configure
+```
+
+## Withou Github hook
+
+```
+npx testflight
+```
+
 ## 📱 App Features
 
 ### Practice Mode
