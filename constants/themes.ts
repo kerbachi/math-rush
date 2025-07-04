@@ -24,10 +24,10 @@ const baseFontTheme: FontTheme = {
 // Theme 1 Colors (Previously Rainbow Adventure)
 const theme1Colors: ColorPalette = {
   // Primary colors
-  primary: '#FF6B9D',
-  primaryDark: '#C44569',
-  secondary: '#4ECDC4',
-  secondaryDark: '#44A08D',
+  primary: ['#FF6B9D', '#C44569'],
+  primaryDark: ['#C44569', '#A0395A'],
+  secondary: ['#4ECDC4', '#44A08D'],
+  secondaryDark: ['#44A08D', '#3A8B7A'],
   
   // Background gradients
   backgroundGradient: ['#FF9A9E', '#FECFEF', '#FECFEF'],
@@ -65,10 +65,10 @@ const theme1Colors: ColorPalette = {
 // Theme 2 Colors (Ocean Deep)
 const theme2Colors: ColorPalette = {
   // Primary colors
-  primary: '#012a67',
-  primaryDark: '#001a4d',
-  secondary: '#00d4ff',
-  secondaryDark: '#0099cc',
+  primary: ['#012a67', '#001a4d'],
+  primaryDark: ['#001a4d', '#001133'],
+  secondary: ['#00d4ff', '#0099cc'],
+  secondaryDark: ['#0099cc', '#007399'],
   
   // Background gradients
   backgroundGradient: ['#1e3c72', '#2a5298', '#3b82f6'],
@@ -106,10 +106,10 @@ const theme2Colors: ColorPalette = {
 // Theme 3 Colors (Azure Professional)
 const theme3Colors: ColorPalette = {
   // Primary colors
-  primary: '#0b6296',
-  primaryDark: '#084d75',
-  secondary: '#17a2b8',
-  secondaryDark: '#138496',
+  primary: ['#0b6296', '#084d75'],
+  primaryDark: ['#084d75', '#063a59'],
+  secondary: ['#17a2b8', '#138496'],
+  secondaryDark: ['#138496', '#0f6b7d'],
   
   // Background gradients
   backgroundGradient: ['#4facfe', '#00f2fe', '#a8edea'],

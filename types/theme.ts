@@ -1,9 +1,9 @@
 export interface ColorPalette {
   // Primary colors
-  primary: string;
-  primaryDark: string;
-  secondary: string;
-  secondaryDark: string;
+  primary: string[];
+  primaryDark: string[];
+  secondary: string[];
+  secondaryDark: string[];
   
   // Background gradients
   backgroundGradient: string[];
