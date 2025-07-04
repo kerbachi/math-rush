@@ -465,7 +465,7 @@ export default function PracticeScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Math Rush</Text>
+            <Text style={styles.title}>MathQuiz Burst</Text>
             <Text style={styles.subtitle}>🚀 Number Adventure! 🌟</Text>
           </View>
           {gameSession?.isActive && (

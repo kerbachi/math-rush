@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Math Rush",
-    "slug": "math-rush",
+    "name": "MathQuiz Burst",
+    "slug": "math-quiz-burst",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Math Rush for Kids.png",
-    "scheme": "math-rush",
+    "icon": "./assets/images/Math Quiz Burst.png",
+    "scheme": "math-quiz-burst",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "math-rush.kerbachi.com",
+      "bundleIdentifier": "math-quiz-burst.kerbachi.com",
       "infoPlist": {
         "NSCameraUsageDescription": "Camera access is not used by this app but required by included libraries",
         "ITSAppUsesNonExemptEncryption": false
@@ -28,9 +28,12 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "1ac5d278-7b06-4c3c-8a9e-f0f62172cb93"
+        "projectId": "10c529eb-9eea-4117-8495-993df481266b"
       }
     },
-    "owner": "expohaux"
+    "owner": "kerbachi",
+    "android": {
+      "package": "com.kerbachi.mathquizburst"
+    }
   }
 }

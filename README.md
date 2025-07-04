@@ -269,6 +269,10 @@ npx testflight
 - **Accessibility**: Enhanced support for users with disabilities
 - **AI Tutoring**: Integration of AI-powered learning assistance
 
+## Useful link
+
+https://www.appicon.co/
+
 ## 📄 License
 
 This project is licensed under the **GNU General Public License (GPL)** - see the [LICENSE](LICENSE) file for details.
