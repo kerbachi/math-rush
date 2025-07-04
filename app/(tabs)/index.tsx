@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import { Play, SquareCheck as CheckSquare, Square, Sparkles, Zap } from 'lucide-react-native';
+import { Play, SquareCheck as CheckSquare, Square, Sparkles, Zap, X } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Operation, MathProblem, GameSession, UserSettings } from '@/types/math';
 import { generateProblemsSet } from '@/utils/mathGenerator';
@@ -10,6 +10,7 @@ import Timer from '@/components/Timer';
 import ProblemDisplay from '@/components/ProblemDisplay';
 import NumberPad from '@/components/NumberPad';
 import ResultsModal from '@/components/ResultsModal';
+import StopTestModal from '@/components/StopTestModal';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
@@ -26,6 +27,7 @@ export default function PracticeScreen() {
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  const [showStopConfirmation, setShowStopConfirmation] = useState(false);
 
   // Use refs to prevent stale closures and race conditions
   const gameSessionRef = useRef<GameSession | null>(null);
@@ -407,6 +409,41 @@ export default function PracticeScreen() {
     }, 100);
   };
 
+  const handleStopTest = () => {
+    // Play button sound
+    soundManager.playSound('button');
+    setShowStopConfirmation(true);
+  };
+
+  const confirmStopTest = () => {
+    // Play button sound
+    soundManager.playSound('button');
+    setShowStopConfirmation(false);
+    
+    const currentGameSession = gameSessionRef.current;
+    if (!currentGameSession) return;
+
+    // Check if any questions were answered
+    const answeredProblems = currentGameSession.problems.filter(problem => 
+      problem.userAnswer !== undefined
+    );
+
+    if (answeredProblems.length === 0) {
+      // No questions answered, just reset the game without saving
+      resetGame();
+    } else {
+      // Questions were answered, end the game normally
+      const correctAnswers = answeredProblems.filter(problem => problem.isCorrect);
+      endGame(correctAnswers.length, currentGameSession.problems);
+    }
+  };
+
+  const cancelStopTest = () => {
+    // Play button sound
+    soundManager.playSound('button');
+    setShowStopConfirmation(false);
+  };
+
   const getCurrentProblem = () => {
     if (!gameSession || gameSession.currentProblemIndex >= gameSession.problems.length) {
       return null;
@@ -471,6 +508,21 @@ export default function PracticeScreen() {
           {gameSession?.isActive && (
             <View style={styles.gameInfo}>
               <Timer timeLeft={timeLeft} isActive={gameSession.isActive} />
+              <TouchableOpacity 
+                style={styles.stopButton} 
+                onPress={handleStopTest}
+                disabled={!!feedback} // Disable during transitions
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={feedback ? ['#F3F4F6', '#E5E7EB'] : theme.colors.error as [string, string]}
+                  style={[styles.stopButtonGradient, feedback && styles.stopButtonDisabled]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <X size={18} color={feedback ? '#D1D5DB' : theme.colors.textOnPrimary} strokeWidth={2.5} />
+                </LinearGradient>
+              </TouchableOpacity>
               <View style={styles.scoreContainer}>
                 <Zap size={16} color="#FFD700" />
                 <Text style={styles.scoreText}>Score: {gameSession.score}</Text>
@@ -570,6 +622,15 @@ export default function PracticeScreen() {
             )}
           </View>
         )}
+
+        {/* Stop Test Confirmation Modal */}
+        <StopTestModal
+          visible={showStopConfirmation}
+          onConfirm={confirmStopTest}
+          onCancel={cancelStopTest}
+          currentScore={gameSession?.score || 0}
+          answeredQuestions={gameSession?.problems.filter(p => p.userAnswer !== undefined).length || 0}
+        />
       </SafeAreaView>
     </LinearGradient>
   );
@@ -606,8 +667,28 @@ const createStyles = (theme: any) => StyleSheet.create({
   gameInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '100%',
+    gap: 12,
+  },
+  stopButton: {
+    borderRadius: 20,
+    shadowColor: theme.colors.primaryDark,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  stopButtonGradient: {
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stopButtonDisabled: {
+    shadowOpacity: 0.1,
+    elevation: 2,
   },
   scoreContainer: {
     flexDirection: 'row',
