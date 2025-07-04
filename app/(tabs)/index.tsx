@@ -10,7 +10,7 @@ import Timer from '@/components/Timer';
 import ProblemDisplay from '@/components/ProblemDisplay';
 import NumberPad from '@/components/NumberPad';
 import ResultsModal from '@/components/ResultsModal';
-import StopTestModal from '@/components/StopTestModal';
+import StopTestModal from '../../components/StopTestModal';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
