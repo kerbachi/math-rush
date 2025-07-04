@@ -1,8 +1,10 @@
 import { Tabs } from 'expo-router';
 import { Calculator, Trophy, Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
+import { soundManager } from '@/utils/soundManager';
+import { router } from 'expo-router';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -31,6 +33,58 @@ export default function TabLayout() {
     ios: TAB_BAR_BASE_PADDING.ios,
     default: 12
   });
+
+  const handleTabPress = (routeName: string, defaultHandler: () => void) => {
+    // Play button sound
+    soundManager.playSound('button');
+    
+    if (routeName === 'scores') {
+      Alert.alert(
+        'View Your Scores? 🏆',
+        'Ready to see your amazing math achievements?',
+        [
+          {
+            text: 'Stay Here 🎮',
+            style: 'cancel',
+            onPress: () => {
+              soundManager.playSound('button');
+            }
+          },
+          {
+            text: 'View Scores! 📊',
+            onPress: () => {
+              soundManager.playSound('button');
+              defaultHandler();
+            }
+          }
+        ]
+      );
+    } else if (routeName === 'settings') {
+      Alert.alert(
+        'Open Settings? ⚙️',
+        'Want to customize your math adventure?',
+        [
+          {
+            text: 'Stay Here 🎮',
+            style: 'cancel',
+            onPress: () => {
+              soundManager.playSound('button');
+            }
+          },
+          {
+            text: 'Open Settings! 🔧',
+            onPress: () => {
+              soundManager.playSound('button');
+              defaultHandler();
+            }
+          }
+        ]
+      );
+    } else {
+      // For the main "Play" tab, navigate directly
+      defaultHandler();
+    }
+  };
 
   return (
     <Tabs
@@ -73,6 +127,12 @@ export default function TabLayout() {
             <Calculator size={size + 4} color={color} strokeWidth={2.5} />
           ),
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            handleTabPress('index', () => router.push('/(tabs)/'));
+          },
+        }}
       />
       <Tabs.Screen
         name="scores"
@@ -82,6 +142,12 @@ export default function TabLayout() {
             <Trophy size={size + 4} color={color} strokeWidth={2.5} />
           ),
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            handleTabPress('scores', () => router.push('/(tabs)/scores'));
+          },
+        }}
       />
       <Tabs.Screen
         name="settings"
@@ -90,6 +156,12 @@ export default function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <Settings size={size + 4} color={color} strokeWidth={2.5} />
           ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            handleTabPress('settings', () => router.push('/(tabs)/settings'));
+          },
         }}
       />
     </Tabs>
