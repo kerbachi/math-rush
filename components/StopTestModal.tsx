@@ -79,7 +79,7 @@ export default function StopTestModal({
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={theme.colors.secondary as [string, string]}
+                colors={theme.colors.secondary}
                 style={styles.cancelButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
