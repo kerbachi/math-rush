@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Calculator, Trophy, Settings } from 'lucide-react-native';
+import { Brain, Trophy, Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -70,7 +70,7 @@ export default function TabLayout() {
         options={{
           title: 'Play',
           tabBarIcon: ({ size, color }) => (
-            <Calculator size={size + 4} color={color} strokeWidth={2.5} />
+            <Brain size={size + 4} color={color} strokeWidth={2.5} />
           ),
         }}
       />
