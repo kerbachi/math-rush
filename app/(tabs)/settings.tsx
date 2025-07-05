@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Switch, ScrollView, Alert, Modal } from 'react-native';
-import { Settings as SettingsIcon, Volume2, VolumeX, SquareCheck as CheckSquare, Square, Trash2, TriangleAlert as AlertTriangle, Sparkles, Palette } from 'lucide-react-native';
+import { Settings as SettingsIcon, Volume2, VolumeX, SquareCheck as CheckSquare, Square, Trash2, TriangleAlert as AlertTriangle, Sparkles, Palette, Mail } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Operation, UserSettings, OperationSettings, NumberRange } from '@/types/math';
 import { getUserSettings, saveUserSettings, clearAllHighScores } from '@/utils/storage';
@@ -286,6 +286,42 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           </View>
 
+          {/* Contact Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>📧 Contact</Text>
+            <Text style={styles.sectionDescription}>
+              Need help or have feedback? Get in touch! 💬
+            </Text>
+            
+            <TouchableOpacity 
+              style={styles.contactButton} 
+              onPress={() => {
+                // Play button sound
+                soundManager.playSound('button');
+                // Open email client
+                import('expo-web-browser').then(({ openBrowserAsync }) => {
+                  openBrowserAsync('mailto:mathquiz-burst@protonmail.com?subject=MathQuiz Burst - Support Request');
+                });
+              }}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={theme.colors.secondary as [string, string]}
+                style={styles.contactGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Mail size={28} color={theme.colors.textOnPrimary} />
+                <View style={styles.contactContent}>
+                  <Text style={styles.contactLabel}>Contact Support 📧</Text>
+                  <Text style={styles.contactDescription}>
+                    Send us an email for help or feedback
+                  </Text>
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
           {/* Legal */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>📄 Legal</Text>
@@ -501,6 +537,36 @@ const createStyles = (theme: any) => StyleSheet.create({
     marginBottom: 4,
   },
   clearHistoryDescription: {
+    fontSize: theme.fonts.bodySmall,
+    fontFamily: theme.fonts.bodyFont,
+    color: theme.colors.textOnPrimary,
+    lineHeight: 18,
+  },
+  contactButton: {
+    borderRadius: 16,
+    shadowColor: theme.colors.secondary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  contactGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 16,
+    gap: 16,
+  },
+  contactContent: {
+    flex: 1,
+  },
+  contactLabel: {
+    fontSize: theme.fonts.bodyLarge,
+    fontFamily: theme.fonts.bodyFont,
+    color: theme.colors.textOnPrimary,
+    marginBottom: 4,
+  },
+  contactDescription: {
     fontSize: theme.fonts.bodySmall,
     fontFamily: theme.fonts.bodyFont,
     color: theme.colors.textOnPrimary,
