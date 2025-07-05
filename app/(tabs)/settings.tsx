@@ -285,6 +285,42 @@ export default function SettingsScreen() {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+
+          {/* Legal */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>📄 Legal</Text>
+            <Text style={styles.sectionDescription}>
+              App information and legal documents 📋
+            </Text>
+            
+            <TouchableOpacity 
+              style={styles.licenseButton} 
+              onPress={() => {
+                // Play button sound
+                soundManager.playSound('button');
+                // Open external license page
+                import('expo-web-browser').then(({ openBrowserAsync }) => {
+                  openBrowserAsync('https://mathquiz-burst.vercel.app/#license');
+                });
+              }}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={theme.colors.surface as [string, string]}
+                style={styles.licenseGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <View style={styles.licenseContent}>
+                  <Text style={styles.licenseLabel}>License 📜</Text>
+                  <Text style={styles.licenseDescription}>
+                    View app license and terms
+                  </Text>
+                </View>
+                <Text style={styles.externalLinkIcon}>🔗</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
 
         {/* Clear History Confirmation Modal */}
@@ -554,5 +590,39 @@ const createStyles = (theme: any) => StyleSheet.create({
     color: theme.colors.textOnPrimary,
     fontSize: theme.fonts.bodyMedium,
     fontFamily: theme.fonts.bodyFont,
+  },
+  licenseButton: {
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  licenseGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    borderRadius: 16,
+  },
+  licenseContent: {
+    flex: 1,
+  },
+  licenseLabel: {
+    fontSize: theme.fonts.bodyLarge,
+    fontFamily: theme.fonts.bodyFont,
+    color: theme.colors.textPrimary,
+    marginBottom: 4,
+  },
+  licenseDescription: {
+    fontSize: theme.fonts.bodySmall,
+    fontFamily: theme.fonts.bodyFont,
+    color: theme.colors.textSecondary,
+    lineHeight: 18,
+  },
+  externalLinkIcon: {
+    fontSize: 20,
+    marginLeft: 12,
   },
 });
