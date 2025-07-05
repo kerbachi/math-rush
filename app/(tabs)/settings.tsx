@@ -299,36 +299,44 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Play button sound
                 soundManager.playSound('button');
-                // Open email client using Linking API for better iOS compatibility
-                const emailUrl = 'mailto:mathquiz-burst@protonmail.com?subject=MathQuiz Burst - Support Request&body=Hi there!%0A%0APlease describe your issue or feedback:%0A%0A';
                 
-                Linking.canOpenURL(emailUrl)
-                  .then((supported) => {
-                    if (supported) {
-                      return Linking.openURL(emailUrl);
-                    } else {
-                      Alert.alert(
-                        'Email Not Available 📧',
-                        'Please send an email to: mathquiz-burst@protonmail.com',
-                        [
-                          {
-                            text: 'Copy Email',
-                            onPress: () => {
-                              // For web compatibility, we'll show the email in an alert
-                              Alert.alert('Email Address', 'mathquiz-burst@protonmail.com');
-                            }
-                          },
-                          { text: 'OK', style: 'default' }
-                        ]
-                      );
-                    }
-                  })
+                // Create a simpler mailto URL for better iOS compatibility
+                const email = 'mathquiz-burst@protonmail.com';
+                const subject = 'MathQuiz Burst - Support Request';
+                const body = 'Hi there!\n\nPlease describe your issue or feedback:\n\n';
+                
+                // Properly encode the URL components
+                const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                console.log('Attempting to open email URL:', emailUrl);
+                
+                // Try to open the email directly
+                Linking.openURL(emailUrl)
                   .catch((error) => {
-                    console.error('Error opening email:', error);
+                    console.error('Failed to open email client:', error);
+                    
+                    // Fallback: Show email address in alert
                     Alert.alert(
-                      'Contact Us 📧',
-                      'Please send an email to: mathquiz-burst@protonmail.com',
-                      [{ text: 'OK', style: 'default' }]
+                      'Contact Support 📧',
+                      `Please send an email to:\n\n${email}\n\nSubject: ${subject}`,
+                      [
+                        {
+                          text: 'Copy Email Address',
+                          onPress: () => {
+                            // On iOS, we can try to copy to clipboard if available
+                            import('@react-native-clipboard/clipboard')
+                              .then(({ default: Clipboard }) => {
+                                Clipboard.setString(email);
+                                Alert.alert('Copied! 📋', 'Email address copied to clipboard');
+                              })
+                              .catch(() => {
+                                // If clipboard is not available, just show the email
+                                Alert.alert('Email Address', email);
+                              });
+                          }
+                        },
+                        { text: 'OK', style: 'default' }
+                      ]
                     );
                   });
               }}
