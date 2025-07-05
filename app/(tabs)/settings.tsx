@@ -323,16 +323,21 @@ export default function SettingsScreen() {
                         {
                           text: 'Copy Email Address',
                           onPress: () => {
-                            // On iOS, we can try to copy to clipboard if available
-                            import('@react-native-clipboard/clipboard')
-                              .then(({ default: Clipboard }) => {
-                                Clipboard.setString(email);
-                                Alert.alert('Copied! 📋', 'Email address copied to clipboard');
-                              })
-                              .catch(() => {
-                                // If clipboard is not available, just show the email
-                                Alert.alert('Email Address', email);
-                              });
+                            // Copy email to clipboard
+                            try {
+                              import('@react-native-clipboard/clipboard')
+                                .then(({ default: Clipboard }) => {
+                                  Clipboard.setString(email);
+                                  Alert.alert('Copied! 📋', 'Email address copied to clipboard');
+                                })
+                                .catch(() => {
+                                  // If clipboard is not available, just show the email
+                                  Alert.alert('Email Address', email);
+                                });
+                            } catch (error) {
+                              // Fallback if import fails
+                              Alert.alert('Email Address', email);
+                            }
                           }
                         },
                         { text: 'OK', style: 'default' }
