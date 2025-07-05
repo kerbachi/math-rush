@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Switch, ScrollView, Alert, Modal } from 'react-native';
+import { Linking } from 'react-native';
 import { Settings as SettingsIcon, Volume2, VolumeX, SquareCheck as CheckSquare, Square, Trash2, TriangleAlert as AlertTriangle, Sparkles, Palette, Mail } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Operation, UserSettings, OperationSettings, NumberRange } from '@/types/math';
@@ -298,10 +299,38 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Play button sound
                 soundManager.playSound('button');
-                // Open email client
-                import('expo-web-browser').then(({ openBrowserAsync }) => {
-                  openBrowserAsync('mailto:mathquiz-burst@protonmail.com?subject=MathQuiz Burst - Support Request');
-                });
+                // Open email client using Linking API for better iOS compatibility
+                const emailUrl = 'mailto:mathquiz-burst@protonmail.com?subject=MathQuiz Burst - Support Request&body=Hi there!%0A%0APlease describe your issue or feedback:%0A%0A';
+                
+                Linking.canOpenURL(emailUrl)
+                  .then((supported) => {
+                    if (supported) {
+                      return Linking.openURL(emailUrl);
+                    } else {
+                      Alert.alert(
+                        'Email Not Available 📧',
+                        'Please send an email to: mathquiz-burst@protonmail.com',
+                        [
+                          {
+                            text: 'Copy Email',
+                            onPress: () => {
+                              // For web compatibility, we'll show the email in an alert
+                              Alert.alert('Email Address', 'mathquiz-burst@protonmail.com');
+                            }
+                          },
+                          { text: 'OK', style: 'default' }
+                        ]
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Error opening email:', error);
+                    Alert.alert(
+                      'Contact Us 📧',
+                      'Please send an email to: mathquiz-burst@protonmail.com',
+                      [{ text: 'OK', style: 'default' }]
+                    );
+                  });
               }}
               activeOpacity={0.8}
             >
@@ -334,10 +363,29 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Play button sound
                 soundManager.playSound('button');
-                // Open external license page
-                import('expo-web-browser').then(({ openBrowserAsync }) => {
-                  openBrowserAsync('https://mathquiz-burst.vercel.app/#license');
-                });
+                // Open external license page using Linking API
+                const licenseUrl = 'https://mathquiz-burst.vercel.app/#license';
+                
+                Linking.canOpenURL(licenseUrl)
+                  .then((supported) => {
+                    if (supported) {
+                      return Linking.openURL(licenseUrl);
+                    } else {
+                      Alert.alert(
+                        'License Information 📜',
+                        'Visit: https://mathquiz-burst.vercel.app/#license',
+                        [{ text: 'OK', style: 'default' }]
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Error opening license URL:', error);
+                    Alert.alert(
+                      'License Information 📜',
+                      'Visit: https://mathquiz-burst.vercel.app/#license',
+                      [{ text: 'OK', style: 'default' }]
+                    );
+                  });
               }}
               activeOpacity={0.8}
             >
