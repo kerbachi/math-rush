@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Switch, ScrollView, Alert, Modal } from 'react-native';
+import { Linking } from 'react-native';
 import { Settings as SettingsIcon, Volume2, VolumeX, SquareCheck as CheckSquare, Square, Trash2, TriangleAlert as AlertTriangle, Sparkles, Palette, Mail } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Operation, UserSettings, OperationSettings, NumberRange } from '@/types/math';
@@ -298,10 +299,51 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Play button sound
                 soundManager.playSound('button');
-                // Open email client
-                import('expo-web-browser').then(({ openBrowserAsync }) => {
-                  openBrowserAsync('mailto:mathquiz-burst@protonmail.com?subject=MathQuiz Burst - Support Request');
-                });
+                
+                // Create a simpler mailto URL for better iOS compatibility
+                const email = 'mathquiz-burst@protonmail.com';
+                const subject = 'MathQuiz Burst - Support Request';
+                const body = 'Hi there!\n\nPlease describe your issue or feedback:\n\n';
+                
+                // Properly encode the URL components
+                const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                
+                console.log('Attempting to open email URL:', emailUrl);
+                
+                // Try to open the email directly
+                Linking.openURL(emailUrl)
+                  .catch((error) => {
+                    console.error('Failed to open email client:', error);
+                    
+                    // Fallback: Show email address in alert
+                    Alert.alert(
+                      'Contact Support 📧',
+                      `Please send an email to:\n\n${email}\n\nSubject: ${subject}`,
+                      [
+                        {
+                          text: 'Copy Email Address',
+                          onPress: () => {
+                            // Copy email to clipboard
+                            try {
+                              import('@react-native-clipboard/clipboard')
+                                .then(({ default: Clipboard }) => {
+                                  Clipboard.setString(email);
+                                  Alert.alert('Copied! 📋', 'Email address copied to clipboard');
+                                })
+                                .catch(() => {
+                                  // If clipboard is not available, just show the email
+                                  Alert.alert('Email Address', email);
+                                });
+                            } catch (error) {
+                              // Fallback if import fails
+                              Alert.alert('Email Address', email);
+                            }
+                          }
+                        },
+                        { text: 'OK', style: 'default' }
+                      ]
+                    );
+                  });
               }}
               activeOpacity={0.8}
             >
@@ -334,10 +376,29 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Play button sound
                 soundManager.playSound('button');
-                // Open external license page
-                import('expo-web-browser').then(({ openBrowserAsync }) => {
-                  openBrowserAsync('https://mathquiz-burst.vercel.app/#license');
-                });
+                // Open external license page using Linking API
+                const licenseUrl = 'https://mathquiz-burst.vercel.app/#license';
+                
+                Linking.canOpenURL(licenseUrl)
+                  .then((supported) => {
+                    if (supported) {
+                      return Linking.openURL(licenseUrl);
+                    } else {
+                      Alert.alert(
+                        'License Information 📜',
+                        'Visit: https://mathquiz-burst.vercel.app/#license',
+                        [{ text: 'OK', style: 'default' }]
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Error opening license URL:', error);
+                    Alert.alert(
+                      'License Information 📜',
+                      'Visit: https://mathquiz-burst.vercel.app/#license',
+                      [{ text: 'OK', style: 'default' }]
+                    );
+                  });
               }}
               activeOpacity={0.8}
             >
